@@ -24,36 +24,33 @@ body {
     height: 100%;
     float: right;
     text-align: center;
-    /* background-color: rgb(255, 255, 255); */
-    display: flex;
+    background-color: rgb(245, 24, 24);
+    /* display: flex; */
     align-items: center;
     justify-content: center;
 }
 .keyboard {
     width: 90%;
-    /* background-color: rgb(255, 255, 255); */
     border-radius: 20px;
     border: 2px solid #484eb9;
-    text-align: center;
+    display: flex; /* Use Flexbox for layout */
+    justify-content: center; /* Center buttons horizontally */
+    flex-wrap: wrap; /* Allow buttons to wrap to new lines */
 }
+
 .keyboard button {
     background-color: #484eb9;
     border: 0px solid #5e63ba;
     color: white;
-    padding: 10px 24px;
+    padding: 0.5em 1em; /* Adjusted padding */
     cursor: pointer;
-    float: center;
     text-align: center;
-    align-items: center;
-    margin-right: 5px;
-    margin-left: 5px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    width: 7%;
-    height: 20%;
+    margin: 5px; /* Simplified margin */
+    display: inline-block; /* Use inline-block */
+    font-size: 28px; /* Adjusted font size */
     border-radius: 10px;
-    font-size: 20px;
 }
+
 
 .keyboard button:not(:last-child) {
     border-right: none; /* Prevent double borders */
@@ -66,32 +63,33 @@ body {
     display: table;
 }
 
+
 .keyboard button:hover {
     background-color: #9194d0;
 }
 
 .half-page-bottom {
-    width: 67%;
+    width: 100%;
     height: 40%;
     float: bottom;
     text-align: center;
-    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(255, 255, 255);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: relative;
     bottom: 0;
 }
 .half-page-top {
-    width: 67%;
+    width: 100%;
     height: 60%;
     float: top;
     text-align: center;
-    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(255, 255, 255);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: relative;
     top: 0;
 }
 .letter-group {
@@ -116,7 +114,7 @@ body {
     align-items: center;
     justify-content: center;
     position: absolute;
-    bottom: -3%;
+    bottom: 0%;
     width: 40%;
     border-radius: 10px;
     border: 2px solid rgb(226, 211, 6);
@@ -157,6 +155,20 @@ body {
     width: 80%;
     height: 50%;
     border-radius: 30px;
+}
+
+.mobile-check {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(10, 4, 102);
+
+    text-align: center;
 }
 
 
