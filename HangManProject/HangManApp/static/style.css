@@ -152,10 +152,12 @@ body {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    height: 50%;
+    width: 60%;
+    height: 60vh; /* Use viewport units for height */
     border-radius: 30px;
+    overflow: auto; /* Ensure content can be scrolled if it exceeds the viewport height */
 }
+
 
 .mobile-check {
     display: none;
