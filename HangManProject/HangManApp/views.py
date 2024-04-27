@@ -31,10 +31,10 @@ def check_letter(request):
     character = data['character']
     username_of_click = data['username']
 
-    score = Game.objects.filter(member_model__username=username_of_click).first()
-    game_word = score.game_word_model
-    current_string = score.current_string_model
-    mistake = score.mistakes_model
+    game = Game.objects.filter(member_model__username=username_of_click).first()
+    game_word = game.game_word_model
+    current_string = game.current_string_model
+    mistake = game.mistakes_model
 
     if character in game_word:
         answer_status = True
@@ -52,15 +52,16 @@ def check_letter(request):
     else: win_status = "none"
     
 
-    score.game_word_model = game_word
-    score.current_string_model = current_string
-    score.mistakes_model = str(mistake)
-    score.save(update_fields=['game_word_model', 'current_string_model', 'mistakes_model'])
+    game.game_word_model = game_word
+    game.current_string_model = current_string
+    game.mistakes_model = str(mistake)
+    game.save(update_fields=['game_word_model', 'current_string_model', 'mistakes_model'])
 
     print("*** user " + username_of_click + " clicked on " + character + " | game_word: " + game_word + ", currentString: " + current_string + ", mistakes: " + str(mistake))
 
     if(win_status == "lose"): answer = game_word
     else: answer = ""
+    
     return JsonResponse({'success': True, 'current_string' : current_string, 'hang_man_image' : 'HangMan' + str(min(mistake+1, 7)) + '.png', 'answer_status' : answer_status, 'win_status': win_status, 'answer' : answer})
 
 def main(request):
@@ -88,10 +89,7 @@ def main(request):
 
     member = Member(username=unique_id)
     member.save()
-    new_score = Game(member_model=member, game_word_model=game_word, current_string_model = current_string, mistakes_model = mistake)
-    new_score.save()
+    new_game = Game(member_model=member, game_word_model=game_word, current_string_model = current_string, mistakes_model = mistake)
+    new_game.save()
 
-    return render(request, 'index.html', {'empty_word' : current_string, 'category' : random_category, 'username' : unique_id})
-
-def own_web(request):
-    return render(request, 'main.html')
+    return render(request, 'index.html', {'current_string' : current_string, 'category' : random_category, 'username' : unique_id})

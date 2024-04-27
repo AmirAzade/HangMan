@@ -1,97 +1,197 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-import random
-from django.contrib.auth import get_user_model
-from HangManApp.models import *
-from django.utils.crypto import get_random_string
-import os
+{% load static %}
+<html>
+    <head>
+        <link href="{% static 'style.css' %}" rel="stylesheet">
+        <title>HangMan Project</title>
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    </head>
+    <body>
+        <div id="mobile_check" class="mobile-check">
+            <h1 style = "color: white; position: relative; top:50%;" id = "error_text">This game is not designed for mobile, please use PC</h1>
+        </div>
+        <!-- start pop-up -->
+        <div id="popup" class="popup">
+            <div class="popup-content" id = "popup-content">
+                <span id="closePopup" class="close" onclick="close_pop_up()">&times;</span>
+                <p style="font-size: 100px; text-align: center;" id = "message-box"></p>
+                <p style="font-size: 50px; text-align: center; " id = "timer-result"></p>
+            </div>
+        </div>
+        <!-- end pop-up -->
+        
+        <div class="half-page-left">
+            <img id = "hang-man-image" src="{% static 'HangMan1.png' %}" alt="Centered Image">
+        </div>
+        <div class="half-page-right">
+            <div class = "half-page-top">
+                <div class="letter-group">
+                    <p id = "game-word" style="font-size: 90px; position: relative; bottom:10%;">{{current_string}}</p>
+                </div>
+                <div class = "timer-box" id = "timer">
+                    00 : 00 : 00
+                </div>
+                <div class = "hint-box">
+                    Category:  {{category}}
+                </div>
+            </div>
+            <div class = "half-page-bottom">
+                <div class="keyboard">
+                    <button id = "Abutton" onclick = "check_letter('A')"> A </button>
+                    <button id = "Bbutton" onclick = "check_letter('B')"> B </button>
+                    <button id = "Cbutton" onclick = "check_letter('C')"> C </button>
+                    <button id = "Dbutton" onclick = "check_letter('D')"> D </button>
+                    <button id = "Ebutton" onclick = "check_letter('E')"> E </button>
+                    <button id = "Fbutton" onclick = "check_letter('F')"> F </button>
+                    <button id = "Gbutton" onclick = "check_letter('G')"> G </button>
+                    <button id = "Hbutton" onclick = "check_letter('H')"> H </button>
+                    <button id = "Ibutton" onclick = "check_letter('I')"> I </button>
+                    <button id = "Jbutton" onclick = "check_letter('J')"> J </button>
+                    <button id = "Kbutton" onclick = "check_letter('K')"> K </button>
+                    <button id = "Lbutton" onclick = "check_letter('L')"> L </button>
+                    <button id = "Mbutton" onclick = "check_letter('M')"> M </button>
+                    <button id = "Nbutton" onclick = "check_letter('N')"> N </button>
+                    <button id = "Obutton" onclick = "check_letter('O')"> O </button>
+                    <button id = "Pbutton" onclick = "check_letter('P')"> P </button>
+                    <button id = "Qbutton" onclick = "check_letter('Q')"> Q </button>
+                    <button id = "Rbutton" onclick = "check_letter('R')"> R </button>
+                    <button id = "Sbutton" onclick = "check_letter('S')"> S </button>
+                    <button id = "Tbutton" onclick = "check_letter('T')"> T </button>
+                    <button id = "Ubutton" onclick = "check_letter('U')"> U </button>
+                    <button id = "Vbutton" onclick = "check_letter('V')"> V </button>
+                    <button id = "Wbutton" onclick = "check_letter('W')"> W </button>
+                    <button id = "Xbutton" onclick = "check_letter('X')"> X </button>
+                    <button id = "Ybutton" onclick = "check_letter('Y')"> Y </button>
+                    <button id = "Zbutton" onclick = "check_letter('Z')"> Z </button>
+                </div>
+            </div>
+            
+            
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {{ username | json_script:"user_name" }}
+        <script>
+            const user_name = JSON.parse(document.getElementById('user_name').textContent);
+            
+            function check_letter(character) {
+                $.ajax({
+                    type: "POST",
+                    url: "/check_letter/",
+                    dataType: "json",
+                    data: JSON.stringify({'character': character, 'username' : user_name }),
+                    contentType: "application/json",
+                    success: function (data) {
+                        var source = "/static/" + data.hang_man_image
+                        document.getElementById('game-word').innerHTML = data.current_string
+                        document.getElementById('hang-man-image').src = source
+                        document.getElementById(character + 'button').style.backgroundColor = (data.answer_status == true? '#68ad74' : '#ff6d6d')
+                        document.getElementById(character + 'button').disabled = true;
+                        
+                        show_pop_up(data.win_status, data.answer)
+                    },
+                    error: function (data) {
+                        alert("Failed to connect server!");
+                    }
+                });
+            }
+            
 
-game_word = ""
-current_string = ""
-mistake = 0
+            let intervalId;
+            function show_pop_up(win_status, answer) {
+                if(win_status == "win")
+                {
+                    document.getElementById('popup').style.display = 'block';
+                    document.getElementById('popup-content').style.backgroundColor = 'green';
+                    document.getElementById('message-box').innerHTML = "You Won!";
+                    document.getElementById('timer-result').innerHTML = document.getElementById('timer').innerHTML;
+                    clearInterval(intervalId);
+                    $(':button').prop('disabled', true); // Disable all the buttons
+                }
+                else if(win_status == "lose")
+                {
+                    document.getElementById('popup').style.display = 'block';
+                    document.getElementById('popup-content').style.backgroundColor = 'red';
+                    document.getElementById('message-box').innerHTML = "You Losed!";
+                    document.getElementById('timer-result').innerHTML = "correct word: " + answer;
 
-word_list = {
-    'food': ['pizza', 'burger', 'sushi', 'pasta', 'salad'],
-    'sport': ['basketball', 'soccer', 'tennis', 'swimming', 'cycling'],
-    'color': ['red', 'blue', 'green', 'yellow', 'black']
-}
+                    clearInterval(intervalId);
+                    $(':button').prop('disabled', true); // Disable all the buttons
+                }
+            }
+            
+            function close_pop_up(win_status) {
+                document.getElementById('popup').style.display = 'none';
+            }
+            
+            
+            
+            window.onload = function() {
+                stopWatch();
+            }
 
+            function stopWatch() {
+                let time = 0;
+                
 
-@csrf_exempt
-def check_letter(request):
-    global game_word
-    global current_string
-    global mistake
+                // Start the stopwatch automatically
+                time = -1;
+                incrementTime();
+                intervalId = setInterval(incrementTime, 1000);
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
 
+                function incrementTime() {
+                    time++;
+                    document.getElementById("timer").textContent = ("0" + Math.trunc(time / 3600)).slice(-2) + " : " + ("0" + Math.trunc((time % 3600) / 60)).slice(-2) + " : " + ("0" + (time % 60)).slice(-2);
+                }
+            }
+        </script>
+        <script>
+            const elemWidth = document.getElementById("Abutton").offsetWidth;
+            document.getElementById("Abutton").style.height = elemWidth;
+            document.getElementById("Bbutton").style.height = elemWidth;
+            document.getElementById("Cbutton").style.height = elemWidth;
+            document.getElementById("Dbutton").style.height = elemWidth;
+            document.getElementById("Ebutton").style.height = elemWidth;
+            document.getElementById("Fbutton").style.height = elemWidth;
+            document.getElementById("Gbutton").style.height = elemWidth;
+            document.getElementById("Hbutton").style.height = elemWidth;
+            document.getElementById("Ibutton").style.height = elemWidth;
+            document.getElementById("Jbutton").style.height = elemWidth;
+            document.getElementById("Kbutton").style.height = elemWidth;
+            document.getElementById("Lbutton").style.height = elemWidth;
+            document.getElementById("Mbutton").style.height = elemWidth;
+            document.getElementById("Nbutton").style.height = elemWidth;
+            document.getElementById("Obutton").style.height = elemWidth;
+            document.getElementById("Pbutton").style.height = elemWidth;
+            document.getElementById("Qbutton").style.height = elemWidth;
+            document.getElementById("Rbutton").style.height = elemWidth;
+            document.getElementById("Sbutton").style.height = elemWidth;
+            document.getElementById("Tbutton").style.height = elemWidth;
+            document.getElementById("Ubutton").style.height = elemWidth;
+            document.getElementById("Vbutton").style.height = elemWidth;
+            document.getElementById("Wbutton").style.height = elemWidth;
+            document.getElementById("Xbutton").style.height = elemWidth;
+            document.getElementById("Ybutton").style.height = elemWidth;
+            document.getElementById("Zbutton").style.height = elemWidth;
+            
+            function isMobileDevice() {
+                return (window.innerWidth < 1300) || (navigator.userAgent.indexOf("Mobi") > -1);
+            }
 
+            if (navigator.userAgent.indexOf("Mobi") > -1) {
+                document.getElementById('mobile_check').style.display = 'block';
+                document.getElementById('error_text').innerHTML = 'This game is not designed for mobile, please use PC';
+            }
+            else if (window.innerWidth < 1300) {
+                document.getElementById('mobile_check').style.display = 'block';
+                document.getElementById('error_text').innerHTML = 'Please Full Screen your browser and refresh to open the game!';
+            }
+            else {
+                document.getElementById('mobile_check').style.display = 'none';
+            }
 
-    data = json.loads(request.body)
-    character = data['character']
-    username_of_click = data['username']
+        </script>
+    </body>
+</html>
 
-    score = Game.objects.filter(member_model__username=username_of_click).first()
-    game_word = score.game_word_model
-    current_string = score.current_string_model
-    mistake = score.mistakes_model
-
-    if character in game_word:
-        answer_status = True
-        for i in range(len(game_word)):
-            if game_word[i] != ' ' and game_word[i] == character:
-                current_string_list = list(current_string)
-                current_string_list[i] = game_word[i]
-                current_string = ''.join(current_string_list)
-    else:
-        answer_status = False
-        mistake+= 1
-
-    if(mistake >= 6): win_status = "lose"
-    elif(not '_' in current_string): win_status = "win"
-    else: win_status = "none"
-    
-
-    score.game_word_model = game_word
-    score.current_string_model = current_string
-    score.mistakes_model = str(mistake)
-    score.save(update_fields=['game_word_model', 'current_string_model', 'mistakes_model'])
-
-    print("*** user " + username_of_click + " clicked on " + character + " | game_word: " + game_word + ", currentString: " + current_string + ", mistakes: " + str(mistake))
-
-    if(win_status == "lose"): answer = game_word
-    else: answer = ""
-    return JsonResponse({'success': True, 'current_string' : current_string, 'hang_man_image' : 'HangMan' + str(min(mistake+1, 7)) + '.png', 'answer_status' : answer_status, 'win_status': win_status, 'answer' : answer})
-
-def main(request):
-    
-    global game_word
-    global current_string
-    global mistake
-    global word_list
-    
-    random_category = random.choice(list(word_list.keys()))
-    random_item = random.choice(word_list[random_category])
-
-    game_word = random_item
-
-    mistake = 0
-    current_string = "_"*len(game_word)
-
-    game_word = ' '.join(game_word.upper())
-    current_string = ' '.join(current_string.upper())
-
-    
-
-    unique_id = str(get_random_string(length=32))
-    print("*** new game started with " + game_word + " word by " + unique_id)
-
-    member = Member(username=unique_id)
-    member.save()
-    new_score = Game(member_model=member, game_word_model=game_word, current_string_model = current_string, mistakes_model = mistake)
-    new_score.save()
-
-    return render(request, 'index.html', {'empty_word' : current_string, 'category' : random_category, 'username' : unique_id})
-
-def own_web(request):
-    return render(request, 'main.html')
