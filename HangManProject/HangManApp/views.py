@@ -178,8 +178,6 @@ def main(request):
     game_word = ' '.join(game_word.upper())
     current_string = ' '.join(current_string.upper())
 
-    
-
     unique_id = str(get_random_string(length=32))
     print("*** new game started with " + game_word + " word by " + unique_id)
 

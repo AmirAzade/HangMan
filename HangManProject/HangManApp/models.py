@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-# Create your models here.
 class Member(models.Model):
-    username = models.CharField(max_length=255)
+    username = models.CharField(max_length=200)
 
 
 class Game(models.Model):
