@@ -12,7 +12,7 @@ Follow these steps to set up the project locally:
 
 1. Clone the repository
 ```bash
-git clone [https://github.com/yourusername/hangman-django.git](https://github.com/AmirAzade/HangMan.git)
+git clone https://github.com/AmirAzade/HangMan.git
 ```
 2. Open directory
 ```bash
