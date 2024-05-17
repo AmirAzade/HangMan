@@ -1,5 +1,5 @@
 # Hangman Game with Django
-<p float="left">
+<p float="center">
   <img src="images/pic1.png" alt="Game Start" width="45%" />
   <img src="images/pic2.png" alt="Correct Guess" width="45%" />
 </p>
