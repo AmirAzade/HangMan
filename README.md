@@ -1,4 +1,8 @@
 # Hangman Game with Django
+<p float="left">
+  <img src="images/pic1.png" alt="Game Start" width="45%" />
+  <img src="images/pic2.png" alt="Correct Guess" width="45%" />
+</p>
 
 # Introduction
 Welcome to the Hangman Game, a classic word guessing game implemented using the Django framework. Also the frontend of this application is created using basic HTML, CSS, and JavaScript, integrated into Django templates.
