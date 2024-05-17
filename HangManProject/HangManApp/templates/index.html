@@ -1,0 +1,70 @@
+{% load static %}
+<html>
+    <head>
+        <link href="{% static 'style.css' %}" rel="stylesheet">
+        <title>HangMan Project</title>
+    </head>
+    <body>
+        <!-- start pop-up -->
+        <div id="popup" class="popup">
+            <div class="popup-content" id = "popup-content">
+                <span id="closePopup" class="close" onclick="close_pop_up()">&times;</span>
+                <p style="font-size: 100px; text-align: center;" id = "message-box"></p>
+                <p style="font-size: 50px; text-align: center; " id = "timer-result"></p>
+            </div>
+        </div>
+        <!-- end pop-up -->
+        
+        <div class="half-page-left">
+            <img id = "hang-man-image" src="{% static 'HangMan1.png' %}" alt="Centered Image">
+        </div>
+        <div class="half-page-right">
+            <div class = "half-page-top">
+                <div class="letter-group">
+                    <p id = "current-string" style="font-size: 90px; position: relative; bottom:10%;">{{current_string}}</p>
+                </div>
+                <div class = "timer-box" id = "timer">
+                    00 : 00 : 00
+                </div>
+                <div class = "hint-box">
+                    Category:  {{category}}
+                </div>
+            </div>
+            <div class = "half-page-bottom">
+                <div class="keyboard">
+                    <button id = "Abutton" onclick = "check_letter('A')"> A </button>
+                    <button id = "Bbutton" onclick = "check_letter('B')"> B </button>
+                    <button id = "Cbutton" onclick = "check_letter('C')"> C </button>
+                    <button id = "Dbutton" onclick = "check_letter('D')"> D </button>
+                    <button id = "Ebutton" onclick = "check_letter('E')"> E </button>
+                    <button id = "Fbutton" onclick = "check_letter('F')"> F </button>
+                    <button id = "Gbutton" onclick = "check_letter('G')"> G </button>
+                    <button id = "Hbutton" onclick = "check_letter('H')"> H </button>
+                    <button id = "Ibutton" onclick = "check_letter('I')"> I </button>
+                    <button id = "Jbutton" onclick = "check_letter('J')"> J </button>
+                    <button id = "Kbutton" onclick = "check_letter('K')"> K </button>
+                    <button id = "Lbutton" onclick = "check_letter('L')"> L </button>
+                    <button id = "Mbutton" onclick = "check_letter('M')"> M </button>
+                    <button id = "Nbutton" onclick = "check_letter('N')"> N </button>
+                    <button id = "Obutton" onclick = "check_letter('O')"> O </button>
+                    <button id = "Pbutton" onclick = "check_letter('P')"> P </button>
+                    <button id = "Qbutton" onclick = "check_letter('Q')"> Q </button>
+                    <button id = "Rbutton" onclick = "check_letter('R')"> R </button>
+                    <button id = "Sbutton" onclick = "check_letter('S')"> S </button>
+                    <button id = "Tbutton" onclick = "check_letter('T')"> T </button>
+                    <button id = "Ubutton" onclick = "check_letter('U')"> U </button>
+                    <button id = "Vbutton" onclick = "check_letter('V')"> V </button>
+                    <button id = "Wbutton" onclick = "check_letter('W')"> W </button>
+                    <button id = "Xbutton" onclick = "check_letter('X')"> X </button>
+                    <button id = "Ybutton" onclick = "check_letter('Y')"> Y </button>
+                    <button id = "Zbutton" onclick = "check_letter('Z')"> Z </button>
+                </div>
+            </div>
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {{ username | json_script:"user_name" }}
+        <script src = "{% static 'scripts.js' %}"></script>
+        
+    </body>
+</html>
