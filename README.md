@@ -33,4 +33,4 @@ python manage.py runserver
 6. Open your web browser and go to http://127.0.0.1:8000/ and enjoy the game!
 
 # Live Demo
-You can try out the live version of the Hangman Game from <a href = "https://amirazade.ir/hangman">Here</a>
+You can try out the live version of the Hangman Game from <a href = "https://amirazade.ir/hangman">Here </a>
