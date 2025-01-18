@@ -8,7 +8,7 @@
 Welcome to the Hangman Game, a classic word guessing game implemented using the Django framework. Also the frontend of this application is created using basic HTML, CSS, and JavaScript, integrated into Django templates.
 
 # Installation
-Follow these steps to set up the project locally:
+Follow these steps to setup the project locally:
 
 1. Clone the repository
 ```bash
