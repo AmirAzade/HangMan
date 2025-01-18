@@ -100,7 +100,7 @@ word_list = {
                     "XMen", "Zootopia"
                     ] 
   ,  "videogames" : [
-                    "Yoshi","Wildermyth","Wildermyth","WatchDogs","Wandersong","Valorant","Unworthy",
+                    "GTAVI","Wildermyth","Wildermyth","WatchDogs","Wandersong","Valorant","Unworthy",
                     "Unworthy","UntitledGoose","UntilDawn","Unrailed!","Unrailed!","Unlucky","Undertale","Truberbrook","Townscaper",
                     "TowerFall","TheVanishing","TheSwapper","ThePedestrian","TheMessenger","TheGardens","Terraria","Tale",
                     "SuperSmash","SuperMeat","SuperCrush","StreetFighter","Stardew","SpiderMan","Spelunky","Sonic","Soma","Skellboy","ShovelKnight",
